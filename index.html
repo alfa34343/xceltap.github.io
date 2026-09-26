@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>XcelTap — Your Student Assistant</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #111111;
+      line-height: 1.6;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 7%;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .nav-text {
+      font-size: 14px;
+      color: #666666;
+    }
+
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 110px 7% 100px;
+      text-align: center;
+    }
+
+    .tag {
+      display: inline-block;
+      border: 1px solid #dddddd;
+      border-radius: 50px;
+      padding: 7px 14px;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: clamp(45px, 8vw, 82px);
+      line-height: 1;
+      letter-spacing: -4px;
+      margin-bottom: 28px;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: auto;
+      font-size: 19px;
+      color: #555555;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 35px;
+      padding: 14px 25px;
+      background: #111111;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    section {
+      max-width: 1000px;
+      margin: auto;
+      padding: 90px 7%;
+    }
+
+    .section-title {
+      font-size: 36px;
+      letter-spacing: -1.5px;
+      margin-bottom: 45px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 28px;
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+
+    .card p {
+      color: #666666;
+      font-size: 15px;
+    }
+
+    .privacy {
+      background: #f7f7f7;
+      border-radius: 18px;
+      padding: 45px;
+    }
+
+    .privacy p {
+      color: #555555;
+      max-width: 650px;
+    }
+
+    footer {
+      border-top: 1px solid #eeeeee;
+      padding: 35px 7%;
+      text-align: center;
+      color: #777777;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .hero {
+        padding-top: 75px;
+      }
+
+      .privacy {
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">XcelTap</div>
+    <div class="nav-text">Built for students</div>
+  </nav>
+
+  <main>
+
+    <section class="hero">
+
+      <div class="tag">
+        A student-first assistant
+      </div>
+
+      <h1>
+        One tap.<br>
+        Keep moving.
+      </h1>
+
+      <p>
+        XcelTap is being built to make repetitive student
+        applications simpler, faster and less frustrating.
+      </p>
+
+      <a href="#how" class="button">
+        See how it works
+      </a>
+
+    </section>
+
+    <section id="how">
+
+      <h2 class="section-title">
+        Made for the work students repeat.
+      </h2>
+
+      <div class="grid">
+
+        <div class="card">
+          <h3>Save once</h3>
+          <p>
+            Keep your common academic and application
+            information ready when you need it.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Use anywhere</h3>
+          <p>
+            Get useful information and suggestions while
+            completing applications.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>You stay in control</h3>
+          <p>
+            You decide what information is used.
+            Nothing should happen without your knowledge.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section>
+
+      <div class="privacy">
+
+        <h2 class="section-title">
+          Privacy isn't an afterthought.
+        </h2>
+
+        <p>
+          XcelTap is being designed around a simple principle:
+          your information belongs to you. We aim to minimize
+          data collection and give students clear control over
+          what information they use.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 XcelTap · Built with students in mind.
+  </footer>
+
+</body>
+</html>
