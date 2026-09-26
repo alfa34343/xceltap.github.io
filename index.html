@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="XcelTap — a privacy-first student application assistant.">
+<title>XcelTap — Student Application Assistant</title>
+
+<style>
+:root{
+  --bg:#f5f5f3; --card:#fff; --ink:#111; --muted:#707070;
+  --line:#e3e3e0; --soft:#f0f0ed; --green:#1f7a4d; --red:#b7352b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:230px;background:#111;color:white;padding:24px 16px;
+  position:fixed;left:0;top:0;bottom:0;z-index:10
+}
+.brand{font-size:23px;font-weight:800;margin:4px 10px 42px}
+.brand span{color:#aaa}
+.nav button{
+  width:100%;border:0;background:transparent;color:#aaa;text-align:left;
+  padding:12px 13px;border-radius:10px;margin-bottom:5px;font-size:14px
+}
+.nav button.active,.nav button:hover{background:#252525;color:white}
+.side-note{
+  position:absolute;left:26px;right:22px;bottom:25px;
+  color:#777;font-size:11px;line-height:1.5
+}
+.main{margin-left:230px;width:calc(100% - 230px);padding:30px}
+.page{display:none;max-width:1050px;margin:auto}
+.page.active{display:block}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.top h1{font-size:32px;letter-spacing:-1.4px}
+.top p{color:var(--muted);font-size:13px;margin-top:6px}
+.badge{background:#e8f4ed;color:var(--green);padding:7px 10px;border-radius:999px;font-size:11px;font-weight:700}
+.hero{
+  background:#111;color:white;border-radius:22px;padding:35px;
+  margin-bottom:18px
+}
+.hero h2{font-size:40px;letter-spacing:-2px;line-height:1.02;margin-bottom:13px}
+.hero p{color:#aaa;max-width:570px;line-height:1.55;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:22px
+}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{color:var(--muted);font-size:13px;line-height:1.5}
+.stat{font-size:31px;font-weight:800;margin:5px 0 3px}
+.form-card{background:white;border:1px solid var(--line);border-radius:18px;padding:25px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.field{margin-bottom:2px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:7px}
+input,textarea{
+  width:100%;padding:13px;border:1px solid #d7d7d3;border-radius:9px;
+  outline:none;background:#fafaf8;font-size:14px
+}
+input:focus,textarea:focus{border-color:#111;background:white}
+textarea{min-height:95px;resize:vertical}
+.full{grid-column:1/-1}
+.primary,.secondary,.danger{
+  border-radius:9px;padding:12px 16px;border:1px solid #111;font-weight:700;font-size:13px
+}
+.primary{background:#111;color:white}
+.secondary{background:white;color:#111}
+.danger{border-color:#d8d8d4;background:white;color:var(--red)}
+.actions{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap}
+.notice{display:none;margin-top:14px;padding:11px;border-radius:9px;background:#e8f4ed;color:var(--green);font-size:12px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.answer-card{
+  background:white;border:1px solid var(--line);border-radius:16px;padding:20px
+}
+.answer-card h3{font-size:16px;margin-bottom:9px}
+.answer-card textarea{min-height:125px;background:#fafaf8}
+.copy{margin-top:9px;width:100%}
+.assistant{
+  background:white;border:1px solid var(--line);border-radius:18px;padding:25px
+}
+.search{
+  margin-bottom:16px
+}
+.search input{background:white}
+.info-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info{
+  border:1px solid var(--line);border-radius:12px;padding:15px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafaf8
+}
+.info small{display:block;color:var(--muted);font-size:10px;margin-bottom:4px;text-transform:uppercase}
+.info strong{font-size:13px;word-break:break-word}
+.mini{
+  border:1px solid #ccc;background:white;border-radius:8px;padding:7px 9px;font-size:11px
+}
+.empty{color:var(--muted);font-size:13px;padding:20px 0}
+footer{text-align:center;color:#888;font-size:11px;margin:30px 0}
+@media(max-width:800px){
+  .sidebar{width:100%;height:auto;bottom:auto;position:sticky;padding:10px;display:flex;align-items:center;gap:8px}
+  .brand{margin:0 8px;font-size:19px}
+  .nav{display:flex;overflow:auto;gap:3px}
+  .nav button{white-space:nowrap;margin:0;padding:9px 10px}
+  .side-note{display:none}
+  .app{display:block}
+  .main{margin-left:0;width:100%;padding:18px}
+  .grid,.answers,.info-list,.form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .hero h2{font-size:32px}
+  .top h1{font-size:27px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="brand">Xcel<span>Tap</span></div>
+  <nav class="nav">
+    <button class="active" onclick="showPage('home',this)">Home</button>
+    <button onclick="showPage('profile',this)">My Profile</button>
+    <button onclick="showPage('answers',this)">Saved Answers</button>
+    <button onclick="showPage('assistant',this)">Assistant</button>
+    <button onclick="showPage('privacy',this)">Privacy</button>
+  </nav>
+  <div class="side-note">Your information stays on this device in this prototype.</div>
+</aside>
+
+<main class="main">
+
+<section id="home" class="page active">
+  <div class="top">
+    <div><h1>Welcome to XcelTap.</h1><p>Your student application workspace.</p></div>
+    <span class="badge">PRIVATE PROTOTYPE</span>
+  </div>
+
+  <div class="hero">
+    <h2>Fill less.<br>Move faster.</h2>
+    <p>
+      Keep your common student information and application answers in one place.
+      When you need them, XcelTap puts them one tap away.
+    </p>
+    <div class="actions">
+      <button class="primary" onclick="showPage('profile')">Create / edit profile</button>
+      <button class="secondary" onclick="showPage('assistant')">Open assistant</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Profile</h3>
+      <div class="stat" id="profileCount">0</div>
+      <p>Profile fields saved.</p>
+    </div>
+    <div class="card">
+      <h3>Answers</h3>
+      <div class="stat" id="answerCount">0</div>
+      <p>Reusable application answers.</p>
+    </div>
+    <div class="card">
+      <h3>Control</h3>
+      <div class="stat">100%</div>
+      <p>You choose what information to copy or use.</p>
+    </div>
+  </div>
+
+  <footer>XcelTap · Student-first · Privacy-first</footer>
+</section>
+
+<section id="profile" class="page">
+  <div class="top">
+    <div><h1>My Profile</h1><p>Save information you repeatedly enter.</p></div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="field"><label>Full name</label><input id="name" placeholder="Your full name"></div>
+      <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
+      <div class="field"><label>Phone</label><input id="phone" type="tel" placeholder="Your phone number"></div>
+      <div class="field"><label>College / University</label><input id="college" placeholder="Your college"></div>
+      <div class="field"><label>Degree</label><input id="degree" placeholder="e.g. BBA"></div>
+      <div class="field"><label>Graduation year</label><input id="year" placeholder="e.g. 2026"></div>
+      <div class="field"><label>CGPA / Percentage</label><input id="score" placeholder="e.g. 7.1 CGPA"></div>
+      <div class="field"><label>Location</label><input id="location" placeholder="City, State"></div>
+      <div class="field full"><label>Skills</label><textarea id="skills" placeholder="e.g. Excel, Communication, Financial Analysis"></textarea></div>
+      <div class="field full"><label>About me</label><textarea id="about" placeholder="A short introduction about yourself"></textarea></div>
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="saveProfile()">Save profile</button>
+      <button class="danger" onclick="clearProfile()">Clear profile</button>
+    </div>
+    <div class="notice" id="profileNotice">✓ Profile saved on this device.</div>
+  </div>
+</section>
+
+<section id="answers" class="page">
+  <div class="top">
+    <div><h1>Saved Answers</h1><p>Write once. Reuse when needed.</p></div>
+  </div>
+
+  <div class="answers">
+    <div class="answer-card">
+      <h3>Tell me about yourself</h3>
+      <textarea id="a1" placeholder="Write your answer here..."></textarea>
+      <button class="secondary copy" onclick="copyText('a1')">Copy answer</button>
+    </div>
+    <div class="answer-card">
+      <h3>Why do you want this internship?</h3>
+      <textarea id="a2" placeholder="Write your answer here..."></textarea>
+      <button class="secondary copy" onclick="copyText('a2')">Copy answer</button>
+    </div>
+    <div class="answer-card">
+      <h3>Why should we select you?</h3>
+      <textarea id="a3" placeholder="Write your answer here..."></textarea>
+      <button class="secondary copy" onclick="copyText('a3')">Copy answer</button>
+    </div>
+    <div class="answer-card">
+      <h3>Career goals</h3>
+      <textarea id="a4" placeholder="Write your answer here..."></textarea>
+      <button class="secondary copy" onclick="copyText('a4')">Copy answer</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="primary" onclick="saveAnswers()">Save answers</button>
+  </div>
+  <div class="notice" id="answerNotice">✓ Answers saved on this device.</div>
+</section>
+
+<section id="assistant" class="page">
+  <div class="top">
+    <div><h1>XcelTap Assistant</h1><p>Find information and copy it with one tap.</p></div>
+  </div>
+
+  <div class="assistant">
+    <div class="search">
+      <input id="searchBox" oninput="renderAssistant()" placeholder="Search name, college, CGPA, skills...">
+    </div>
+    <div id="assistantList" class="info-list"></div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>How this prototype works</h3>
+    <p>
+      Choose a field below and copy it into an application. The future Android
+      version will bring this assistant closer to the place where you are typing.
+    </p>
+  </div>
+</section>
+
+<section id="privacy" class="page">
+  <div class="top">
+    <div><h1>Privacy</h1><p>Simple by design.</p></div>
+  </div>
+
+  <div class="card">
+    <h3>Your data stays local in this prototype.</h3>
+    <p style="margin-top:12px">
+      XcelTap currently uses your browser's local storage. There is no XcelTap
+      server, database, AI API, or account system in this prototype.
+      Do not enter highly sensitive information such as passwords, bank details,
+      Aadhaar or PAN numbers.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Future principle</h3>
+    <p style="margin-top:12px">
+      You should know what information is being used, where it goes, and when
+      it is shared. Automatic submission will not happen without user control.
+    </p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+const fields = [
+  ["name","Full name"],["email","Email"],["phone","Phone"],
+  ["college","College"],["degree","Degree"],["year","Graduation year"],
+  ["score","CGPA / Percentage"],["location","Location"],
+  ["skills","Skills"],["about","About me"]
+];
+
+function saveProfile(){
+  const profile = {};
+  fields.forEach(([id]) => profile[id] = document.getElementById(id).value.trim());
+  localStorage.setItem("xceltapProfile", JSON.stringify(profile));
+  document.getElementById("profileNotice").style.display = "block";
+  updateStats();
+  renderAssistant();
+}
+
+function loadProfile(){
+  const saved = localStorage.getItem("xceltapProfile");
+  if(!saved) return;
+  const profile = JSON.parse(saved);
+  fields.forEach(([id]) => {
+    if(document.getElementById(id)) document.getElementById(id).value = profile[id] || "";
+  });
+}
+
+function clearProfile(){
+  if(!confirm("Clear your saved profile from this device?")) return;
+  localStorage.removeItem("xceltapProfile");
+  fields.forEach(([id]) => document.getElementById(id).value = "");
+  updateStats();
+  renderAssistant();
+}
+
+function saveAnswers(){
+  const answers = {};
+  ["a1","a2","a3","a4"].forEach(id => answers[id] = document.getElementById(id).value);
+  localStorage.setItem("xceltapAnswers", JSON.stringify(answers));
+  document.getElementById("answerNotice").style.display = "block";
+  updateStats();
+}
+
+function loadAnswers(){
+  const saved = localStorage.getItem("xceltapAnswers");
+  if(!saved) return;
+  const answers = JSON.parse(saved);
+  ["a1","a2","a3","a4"].forEach(id => {
+    document.getElementById(id).value = answers[id] || "";
+  });
+}
+
+function copyText(id){
+  const text = document.getElementById(id).value;
+  if(!text){
+    alert("Write an answer first.");
+    return;
+  }
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Copied to clipboard.");
+  }).catch(() => {
+    alert("Copy failed. Please select the text manually.");
+  });
+}
+
+function renderAssistant(){
+  const profile = JSON.parse(localStorage.getItem("xceltapProfile") || "{}");
+  const query = (document.getElementById("searchBox")?.value || "").toLowerCase();
+  const list = document.getElementById("assistantList");
+  list.innerHTML = "";
+
+  let count = 0;
+
+  fields.forEach(([id,label]) => {
+    const value = profile[id];
+    if(!value) return;
+    if(query && !(label + " " + value).toLowerCase().includes(query)) return;
+
+    count++;
+    const item = document.createElement("div");
+    item.className = "info";
+    item.innerHTML = `
+      <div>
+        <small>${escapeHTML(label)}</small>
+        <strong>${escapeHTML(value)}</strong>
+      </div>
+      <button class="mini" onclick="copyValue(${JSON.stringify(value)})">Copy</button>
+    `;
+    list.appendChild(item);
+  });
+
+  if(!count){
+    list.innerHTML = '<div class="empty">No saved information found. Add your profile first.</div>';
+  }
+}
+
+function copyValue(value){
+  navigator.clipboard.writeText(value).then(() => {
+    alert("Copied to clipboard.");
+  }).catch(() => alert("Copy failed."));
+}
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[char]));
+}
+
+function updateStats(){
+  const profile = JSON.parse(localStorage.getItem("xceltapProfile") || "{}");
+  const answers = JSON.parse(localStorage.getItem("xceltapAnswers") || "{}");
+
+  document.getElementById("profileCount").textContent =
+    fields.filter(([id]) => profile[id]).length;
+
+  document.getElementById("answerCount").textContent =
+    Object.values(answers).filter(Boolean).length;
+}
+
+function showPage(page, button){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+  if(button) button.classList.add("active");
+
+  if(page === "assistant") renderAssistant();
+  window.scrollTo(0,0);
+}
+
+loadProfile();
+loadAnswers();
+updateStats();
+renderAssistant();
+</script>
+
+</body>
+</html>
